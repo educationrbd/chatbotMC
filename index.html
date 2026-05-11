@@ -1,0 +1,1338 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ustadz AI MasjidunaCenter.com - Konsultasi Islam Berbasis AI</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="icon.png">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Cinzel:wght@600&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                        serif: ['Cinzel', 'serif'],
+                    },
+                    colors: {
+                        islamic: { // Emerald Green Palette
+                            50: '#ecfdf5',
+                            100: '#d1fae5',
+                            200: '#a7f3d0',
+                            300: '#6ee7b7',
+                            400: '#34d399',
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857',
+                            800: '#065f46',
+                            900: '#064e3b',
+                            950: '#022c22',
+                        },
+                        accent: { // Vibrant Cyan/Teal Palette
+                            50: '#ecfeff',
+                            100: '#cffafe',
+                            400: '#22d3ee',
+                            500: '#06b6d4',
+                            600: '#0891b2',
+                            900: '#164e63',
+                        },
+                        gold: { // Vibrant Amber Palette
+                            400: '#fbbf24',
+                            500: '#f59e0b',
+                            600: '#d97706',
+                        }
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-out',
+                        'slide-up': 'slideUp 0.5s ease-out',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        slideUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            /* Light Vibrant Gradient Background */
+            background-color: #f8fafc;
+            background-image: 
+                radial-gradient(circle at 0% 0%, rgba(16, 185, 129, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 100% 100%, rgba(8, 145, 178, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.03) 0%, transparent 60%);
+            background-attachment: fixed;
+            color: #064e3b; /* islamic-900 */
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(16, 185, 129, 0.15);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+        }
+        .neon-glow:hover {
+            box-shadow: 0 0 20px rgba(6, 182, 212, 0.4);
+        }
+        /* Slider specifics */
+        .slide {
+            transition: opacity 0.8s ease-in-out;
+            opacity: 0;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+        .slide.active {
+            opacity: 1;
+            z-index: 10;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 glass-panel border-b border-islamic-200/50 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                <div class="flex-shrink-0 flex items-center cursor-pointer group" onclick="navigate('home')">
+                    <!-- Logo MasjidBerdaya -->
+                    <img src="logo.png" alt="MasjidBerdaya Logo" class="w-12 h-12 object-contain mr-3 hidden sm:block drop-shadow-sm">
+                    <div class="flex flex-col justify-center">
+                        <span class="font-serif text-xl md:text-2xl font-bold text-islamic-950 tracking-wider leading-tight">Ustadz AI <span class="text-islamic-500">MasjidunaCenter</span></span>
+                        <span class="text-[9px] md:text-[10px] text-gold-600 tracking-widest uppercase font-bold">Konsultasi Islam Berbasis Al-Quran & Hadist</span>
+                    </div>
+                </div>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex space-x-8 items-center">
+                    <button onclick="navigate('home')" class="text-islamic-700 hover:text-accent-600 transition-colors font-medium">Beranda</button>
+                    <button onclick="navigate('chat')" class="text-islamic-700 hover:text-accent-600 transition-colors font-medium">Tanya Ustadz AI</button>
+                    <button onclick="navigate('about')" class="text-islamic-700 hover:text-accent-600 transition-colors font-medium">Tentang</button>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button onclick="toggleMobileMenu()" class="text-islamic-900 hover:text-accent-600 focus:outline-none text-2xl">
+                        <i class="fa-solid fa-bars" id="mobile-icon"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden glass-panel border-t border-islamic-200 absolute w-full bg-white">
+            <div class="px-4 pt-2 pb-6 space-y-3">
+                <button onclick="navigate('home')" class="block w-full text-left px-3 py-2 text-islamic-700 hover:bg-islamic-50 rounded-md hover:text-accent-600">Beranda</button>
+                <button onclick="navigate('chat')" class="block w-full text-left px-3 py-2 text-islamic-700 hover:bg-islamic-50 rounded-md hover:text-accent-600">Tanya Ustadz AI</button>
+                <button onclick="navigate('about')" class="block w-full text-left px-3 py-2 text-islamic-700 hover:bg-islamic-50 rounded-md hover:text-accent-600">Tentang</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow pt-20">
+        
+        <!-- PAGE 1: BERANDA -->
+        <div id="page-home" class="page-view animate-fade-in block">
+            <!-- Hero Section -->
+            <div class="relative h-[60vh] sm:h-[70vh] md:h-[80vh] w-full overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-br from-islamic-900 via-islamic-800 to-accent-900">
+                    <div class="absolute inset-0 bg-black/20"></div>
+                </div>
+                <div class="relative h-full flex items-center justify-center text-center px-4">
+                    <div class="max-w-4xl mx-auto animate-slide-up">
+                        <div class="bg-white/10 backdrop-blur-md rounded-2xl p-8 md:p-12 border border-white/20 shadow-2xl">
+                            <div class="mb-6">
+                                <div class="bg-gradient-to-br from-islamic-100 to-accent-100 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6 border-4 border-white/50 shadow-xl">
+                                    <i class="fa-solid fa-turban text-5xl text-islamic-700"></i>
+                                </div>
+                                <h1 class="text-4xl md:text-6xl font-serif font-bold text-white mb-4 leading-tight">
+                                    Ustadz AI <span class="text-gold-400">MasjidunaCenter</span>
+                                </h1>
+                                <p class="text-xl md:text-2xl text-white/90 mb-8 leading-relaxed">
+                                    Konsultasi Islam 24/7 Berbasis Al-Quran & Hadist
+                                </p>
+                                <p class="text-lg text-white/80 mb-8 max-w-2xl mx-auto">
+                                    Dapatkan jawaban untuk pertanyaan keagamaan Anda dari AI yang dilengkapi dengan 
+                                    ribuan sumber Al-Quran, Hadist, Tafsir, dan kitab ulama klasik.
+                                </p>
+                                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                                    <button onclick="navigate('chat')" class="bg-gradient-to-r from-gold-500 to-gold-600 hover:from-gold-400 hover:to-gold-500 text-islamic-900 font-bold py-4 px-8 rounded-full transition-all transform hover:scale-105 shadow-xl flex items-center justify-center">
+                                        <i class="fa-solid fa-comments mr-3"></i>
+                                        Mulai Konsultasi
+                                    </button>
+                                    <button onclick="navigate('about')" class="bg-white/20 backdrop-blur border border-white/30 hover:bg-white/30 text-white font-bold py-4 px-8 rounded-full transition-all flex items-center justify-center">
+                                        <i class="fa-solid fa-info-circle mr-3"></i>
+                                        Pelajari Lebih Lanjut
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Features Section -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl md:text-4xl font-serif font-bold text-islamic-950 mb-4">
+                        Mengapa Memilih <span class="text-accent-600">Ustadz AI</span>?
+                    </h2>
+                    <div class="h-1 w-24 bg-gradient-to-r from-accent-400 to-islamic-400 mx-auto mt-6 rounded-full"></div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="bg-white rounded-2xl p-8 border border-gray-100 hover:border-accent-200 hover:shadow-xl transition-all duration-300">
+                        <div class="bg-gradient-to-br from-islamic-100 to-accent-100 w-16 h-16 rounded-full flex items-center justify-center mb-6">
+                            <i class="fa-solid fa-book-quran text-2xl text-islamic-700"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-islamic-950 mb-3">Berdasarkan Al-Quran</h3>
+                        <p class="text-gray-600 leading-relaxed">Setiap jawaban didasarkan pada ayat-ayat Al-Quran dengan referensi surat dan ayat yang jelas.</p>
+                    </div>
+
+                    <div class="bg-white rounded-2xl p-8 border border-gray-100 hover:border-accent-200 hover:shadow-xl transition-all duration-300">
+                        <div class="bg-gradient-to-br from-islamic-100 to-accent-100 w-16 h-16 rounded-full flex items-center justify-center mb-6">
+                            <i class="fa-solid fa-moon text-2xl text-islamic-700"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-islamic-950 mb-3">Hadist Shahih</h3>
+                        <p class="text-gray-600 leading-relaxed">Referensi hadist dari Bukhari, Muslim, Tirmidzi, dan kitab hadist utama lainnya.</p>
+                    </div>
+
+                    <div class="bg-white rounded-2xl p-8 border border-gray-100 hover:border-accent-200 hover:shadow-xl transition-all duration-300">
+                        <div class="bg-gradient-to-br from-islamic-100 to-accent-100 w-16 h-16 rounded-full flex items-center justify-center mb-6">
+                            <i class="fa-solid fa-graduation-cap text-2xl text-islamic-700"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-islamic-950 mb-3">Tafsir Ulama</h3>
+                        <p class="text-gray-600 leading-relaxed">Mengacu pada tafsir ulama besar seperti Ibnu Katsir, Al-Qurtubi, dan lainnya.</p>
+                    </div>
+
+                    <div class="bg-white rounded-2xl p-8 border border-gray-100 hover:border-accent-200 hover:shadow-xl transition-all duration-300">
+                        <div class="bg-gradient-to-br from-islamic-100 to-accent-100 w-16 h-16 rounded-full flex items-center justify-center mb-6">
+                            <i class="fa-solid fa-clock text-2xl text-islamic-700"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-islamic-950 mb-3">24/7 Tersedia</h3>
+                        <p class="text-gray-600 leading-relaxed">Konsultasi kapan saja tanpa batas waktu, siang atau malam hari.</p>
+                    </div>
+
+                    <div class="bg-white rounded-2xl p-8 border border-gray-100 hover:border-accent-200 hover:shadow-xl transition-all duration-300">
+                        <div class="bg-gradient-to-br from-islamic-100 to-accent-100 w-16 h-16 rounded-full flex items-center justify-center mb-6">
+                            <i class="fa-solid fa-language text-2xl text-islamic-700"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-islamic-950 mb-3">Bahasa Indonesia</h3>
+                        <p class="text-gray-600 leading-relaxed">Jawaban dalam Bahasa Indonesia yang mudah dipahami dengan penjelasan mendalam.</p>
+                    </div>
+
+                    <div class="bg-white rounded-2xl p-8 border border-gray-100 hover:border-accent-200 hover:shadow-xl transition-all duration-300">
+                        <div class="bg-gradient-to-br from-islamic-100 to-accent-100 w-16 h-16 rounded-full flex items-center justify-center mb-6">
+                            <i class="fa-solid fa-shield-halal text-2xl text-islamic-700"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-islamic-950 mb-3">Berdasarkan Ahlusunnah</h3>
+                        <p class="text-gray-600 leading-relaxed">Mengikuti pemahaman Ahlusunnah Wal Jama'ah dalam menjawab pertanyaan.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CTA Section -->
+            <div class="bg-gradient-to-r from-islamic-800 to-accent-800 py-20">
+                <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                    <h2 class="text-3xl md:text-4xl font-serif font-bold text-white mb-6">
+                        Punya Pertanyaan Keagamaan?
+                    </h2>
+                    <p class="text-xl text-white/90 mb-8">
+                        Mulai konsultasi sekarang dengan Ustadz AI dan dapatkan jawaban berdasarkan sumber Islam yang autentik.
+                    </p>
+                    <button onclick="navigate('chat')" class="bg-white text-islamic-900 font-bold py-4 px-8 rounded-full transition-all transform hover:scale-105 shadow-xl flex items-center justify-center mx-auto">
+                        <i class="fa-solid fa-comments mr-3"></i>
+                        Tanya Ustadz AI Sekarang
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 2: CHAT INTERFACE -->
+        <div id="page-chat" class="page-view hidden">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                <!-- Chat Header with Fixed Clear Button -->
+                <div class="bg-white rounded-t-2xl border border-gray-200 p-6 shadow-lg relative">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <div class="bg-gradient-to-br from-islamic-100 to-accent-100 w-16 h-16 rounded-full flex items-center justify-center mr-4 border-2 border-islamic-200">
+                                <i class="fa-solid fa-turban text-2xl text-islamic-700"></i>
+                            </div>
+                            <div>
+                                <h2 class="text-2xl font-serif font-bold text-islamic-950">Ustadz AI MasjidunaCenter</h2>
+                                <p class="text-sm text-gray-600">Konsultasi Islam berbasis Al-Quran & Hadist</p>
+                                <div class="flex items-center mt-1">
+                                    <div class="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+                                    <span class="text-xs text-green-600 font-medium">Online - Siap membantu Anda</span>
+                                </div>
+                            </div>
+                        </div>
+                        <button onclick="clearChat()" class="fixed top-24 right-4 md:right-8 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-all flex items-center shadow-lg z-50">
+                            <i class="fa-solid fa-trash mr-2"></i> Hapus Chat
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Chat Messages Container -->
+                <div class="bg-gray-50 border-x border-gray-200 h-[500px] overflow-y-auto p-6" id="chat-messages">
+                    <div class="space-y-4" id="messages-container">
+                        <!-- Welcome Message -->
+                        <div class="flex justify-start mb-4">
+                            <div class="max-w-xs sm:max-w-md md:max-w-lg">
+                                <div class="bg-gray-100 text-islamic-900 rounded-2xl rounded-tl-sm p-4 shadow-sm border border-gray-200">
+                                    <p class="text-islamic-900 leading-relaxed text-sm">
+                                        <b>Assalamu'alaikum warahmatullahi wabarakatuh.</b><br><br>
+                                        Saya adalah Ustadz AI dari MasjidunaCenter.com. Saya siap membantu menjawab pertanyaan keagamaan Anda berdasarkan Al-Quran, Hadist, dan keterangan ulama.<br><br>
+                                        Silakan ajukan pertanyaan seputar:
+                                    </p>
+                                    <ul class="mt-3 space-y-1 text-sm text-islamic-800">
+                                        <li>• Fikih ibadah (shalat, puasa, zakat, dll)</li>
+                                        <li>• Akidah dan tauhid</li>
+                                        <li>• Akhlak dan adab</li>
+                                        <li>• Tafsir Al-Quran</li>
+                                        <li>• Penjelasan hadist</li>
+                                        <li>• Dan lain-lain</li>
+                                    </ul>
+                                    <p class="text-sm text-gray-600 mt-3">Apa yang ingin Anda tanyakan?</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chat Input -->
+                <div class="bg-white rounded-b-2xl border border-t-0 border-gray-200 p-6 shadow-lg">
+                    <div class="flex gap-3">
+                        <div class="flex-grow relative">
+                            <textarea 
+                                id="chat-input" 
+                                class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 pr-16 text-islamic-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:border-transparent transition-all resize-none" 
+                                placeholder="Ketik pertanyaan keagamaan Anda di sini..."
+                                rows="3"
+                                onkeypress="handleChatKeyPress(event)"
+                            ></textarea>
+                            <div class="absolute bottom-3 right-3 text-xs text-gray-500 bg-white px-2 py-1 rounded border border-gray-200">
+                                <span id="char-count">0</span>/1000
+                            </div>
+                        </div>
+                        <button 
+                            onclick="sendChatMessage()" 
+                            id="btn-send-chat"
+                            class="bg-gradient-to-r from-islamic-500 to-accent-500 hover:from-accent-500 hover:to-islamic-400 text-white font-bold py-3 px-6 rounded-xl transition-all shadow-md hover:shadow-lg flex items-center justify-center whitespace-nowrap self-end"
+                        >
+                            <i class="fa-solid fa-paper-plane mr-2"></i> Kirim
+                        </button>
+                    </div>
+                    <div class="mt-3 flex flex-wrap gap-2">
+                        <button onclick="insertSampleQuestion('Bagaimana cara wudhu yang benar?')" class="text-xs bg-islamic-50 hover:bg-islamic-100 text-islamic-700 px-3 py-1 rounded-full transition-all">
+                            Cara wudhu
+                        </button>
+                        <button onclick="insertSampleQuestion('Apa hukum puasa Senin Kamis?')" class="text-xs bg-islamic-50 hover:bg-islamic-100 text-islamic-700 px-3 py-1 rounded-full transition-all">
+                            Puasa Senin Kamis
+                        </button>
+                        <button onclick="insertSampleQuestion('Jelaskan tentang rukun iman')" class="text-xs bg-islamic-50 hover:bg-islamic-100 text-islamic-700 px-3 py-1 rounded-full transition-all">
+                            Rukun iman
+                        </button>
+                        <button onclick="insertSampleQuestion('Bagaimana tata cara shalat yang benar?')" class="text-xs bg-islamic-50 hover:bg-islamic-100 text-islamic-700 px-3 py-1 rounded-full transition-all">
+                            Tata cara shalat
+                        </button>
+                        <button onclick="insertSampleQuestion('Apa hukum zakat fitrah?')" class="text-xs bg-islamic-50 hover:bg-islamic-100 text-islamic-700 px-3 py-1 rounded-full transition-all">
+                            Zakat fitrah
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 3: ABOUT -->
+        <div id="page-about" class="page-view hidden">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <div class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
+                    <!-- Header -->
+                    <div class="bg-gradient-to-r from-islamic-800 to-accent-800 p-8 text-center">
+                        <div class="bg-white/10 backdrop-blur rounded-full w-24 h-24 flex items-center justify-center mx-auto mb-6 border-4 border-white/20">
+                            <i class="fa-solid fa-turban text-4xl text-white"></i>
+                        </div>
+                        <h1 class="text-3xl md:text-4xl font-serif font-bold text-white mb-4">
+                            Tentang Ustadz AI MasjidunaCenter
+                        </h1>
+                        <p class="text-xl text-white/90">
+                            Konsultasi Islam Berbasis AI Terpercaya
+                        </p>
+                    </div>
+
+                    <!-- Content -->
+                    <div class="p-8">
+                        <div class="prose prose-lg max-w-none">
+                            <h2 class="text-2xl font-serif font-bold text-islamic-950 mb-4">Apa itu Ustadz AI?</h2>
+                            <p class="text-gray-700 leading-relaxed mb-6">
+                                Ustadz AI MasjidunaCenter adalah asisten cerdas berbasis kecerdasan buatan yang dirancang khusus untuk menjawab pertanyaan-pertanyaan keagamaan Islam. Kami menggabungkan teknologi AI modern dengan sumber-sumber Islam yang autentik untuk memberikan jawaban yang akurat dan dapat dipercaya.
+                            </p>
+
+                            <h2 class="text-2xl font-serif font-bold text-islamic-950 mb-4 mt-8">Sumber Knowledge Base</h2>
+                            <div class="bg-islamic-50 rounded-xl p-6 mb-6">
+                                <p class="text-islamic-900 font-medium mb-4">Ustadz AI dilengkapi dengan ribuan sumber dari:</p>
+                                <ul class="space-y-2 text-islamic-800">
+                                    <li class="flex items-start">
+                                        <i class="fa-solid fa-book-quran text-accent-600 mr-3 mt-1"></i>
+                                        <div>
+                                            <strong>Al-Quran dan Terjemahan:</strong> 114 surat dengan 6.236 ayat lengkap terjemahan Bahasa Indonesia
+                                        </div>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fa-solid fa-moon text-accent-600 mr-3 mt-1"></i>
+                                        <div>
+                                            <strong>Hadist Shahih:</strong> Kumpulan hadist dari Shahih Bukhari, Shahih Muslim, Sunan Tirmidzi, Sunan Abu Dawud, dan lainnya
+                                        </div>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fa-solid fa-graduation-cap text-accent-600 mr-3 mt-1"></i>
+                                        <div>
+                                            <strong>Tafsir Ulama:</strong> Tafsir Ibnu Katsir, Tafsir Al-Qurtubi, Tafsir Ath-Thabari, dan tafsir klasik lainnya
+                                        </div>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fa-solid fa-book text-accent-600 mr-3 mt-1"></i>
+                                        <div>
+                                            <strong>Kitab Fikih:</strong> Referensi dari kitab fikih mazhab Syafi'i, Hanafi, Maliki, dan Hanbali
+                                        </div>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fa-solid fa-users text-accent-600 mr-3 mt-1"></i>
+                                        <div>
+                                            <strong>Karya Ulama:</strong> Karya-karya ulama klasik dan kontemporer yang terpercaya
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <h2 class="text-2xl font-serif font-bold text-islamic-950 mb-4 mt-8">Fitur Utama</h2>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                                <div class="bg-white border border-gray-200 rounded-xl p-6">
+                                    <div class="bg-accent-100 w-12 h-12 rounded-full flex items-center justify-center mb-4">
+                                        <i class="fa-solid fa-search text-accent-700"></i>
+                                    </div>
+                                    <h3 class="font-bold text-islamic-950 mb-2">Pencarian Cerdas</h3>
+                                    <p class="text-gray-600 text-sm">AI dapat memahami konteks pertanyaan dan memberikan jawaban yang relevan dengan sumber yang tepat.</p>
+                                </div>
+                                <div class="bg-white border border-gray-200 rounded-xl p-6">
+                                    <div class="bg-accent-100 w-12 h-12 rounded-full flex items-center justify-center mb-4">
+                                        <i class="fa-solid fa-quote-left text-accent-700"></i>
+                                    </div>
+                                    <h3 class="font-bold text-islamic-950 mb-2">Referensi Lengkap</h3>
+                                    <p class="text-gray-600 text-sm">Setiap jawaban dilengkapi dengan referensi ayat, hadist, atau sumber ulama yang dapat diverifikasi.</p>
+                                </div>
+                                <div class="bg-white border border-gray-200 rounded-xl p-6">
+                                    <div class="bg-accent-100 w-12 h-12 rounded-full flex items-center justify-center mb-4">
+                                        <i class="fa-solid fa-language text-accent-700"></i>
+                                    </div>
+                                    <h3 class="font-bold text-islamic-950 mb-2">Bahasa Indonesia</h3>
+                                    <p class="text-gray-600 text-sm">Jawaban dalam Bahasa Indonesia yang mudah dipahami dengan penjelasan yang mendalam.</p>
+                                </div>
+                                <div class="bg-white border border-gray-200 rounded-xl p-6">
+                                    <div class="bg-accent-100 w-12 h-12 rounded-full flex items-center justify-center mb-4">
+                                        <i class="fa-solid fa-clock text-accent-700"></i>
+                                    </div>
+                                    <h3 class="font-bold text-islamic-950 mb-2">24/7 Available</h3>
+                                    <p class="text-gray-600 text-sm">Konsultasi kapan saja tanpa batas waktu, siang atau malam hari.</p>
+                                </div>
+                            </div>
+
+                            <h2 class="text-2xl font-serif font-bold text-islamic-950 mb-4 mt-8">Mengapa Memilih Kami?</h2>
+                            <div class="bg-gradient-to-r from-islamic-50 to-accent-50 rounded-xl p-6 mb-6">
+                                <p class="text-islamic-900 leading-relaxed">
+                                    Ustadz AI MasjidunaCenter berkomitmen untuk menyediakan informasi keagamaan yang <strong>akurat, autentik, dan mudah diakses</strong>. Kami menggunakan teknologi AI terbaru dengan tetap menjaga keabsahan sumber-sumber Islam. Setiap jawaban melalui proses validasi untuk memastikan kesesuaian dengan ajaran Islam yang benar.
+                                </p>
+                            </div>
+
+                            <div class="bg-yellow-50 border border-yellow-200 rounded-xl p-6">
+                                <div class="flex items-start">
+                                    <i class="fa-solid fa-info-circle text-yellow-600 mr-3 mt-1 text-xl"></i>
+                                    <div>
+                                        <h3 class="font-bold text-islamic-950 mb-2">Penting untuk Diketahui</h3>
+                                        <p class="text-gray-700 text-sm leading-relaxed">
+                                            Ustadz AI adalah alat bantu pendidikan keagamaan. Untuk masalah hukum yang kompleks atau keputusan penting, kami tetap menyarankan untuk berkonsultasi langsung dengan ustadz atau ulama yang kompeten di daerah Anda.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- CTA -->
+                        <div class="text-center mt-8">
+                            <button onclick="navigate('chat')" class="bg-gradient-to-r from-islamic-500 to-accent-500 hover:from-accent-500 hover:to-islamic-400 text-white font-bold py-4 px-8 rounded-full transition-all transform hover:scale-105 shadow-xl flex items-center justify-center mx-auto">
+                                <i class="fa-solid fa-comments mr-3"></i>
+                                Mulai Konsultasi Sekarang
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+                <!-- Kiri: Ustadz AI Logo -->
+                <div class="flex flex-col items-center md:items-start w-full md:w-auto">
+                    <div class="flex items-center">
+                        <img src="logo.png" alt="Ustadz AI Logo" class="w-8 h-8 object-contain mr-2 drop-shadow-sm">
+                        <span class="font-serif font-bold text-islamic-950">Ustadz AI <span class="text-islamic-500">MasjidunaCenter</span></span>
+                    </div>
+                    <span class="text-[10px] text-islamic-800 mt-1 font-medium bg-islamic-50 px-2 py-0.5 rounded border border-islamic-200">Konsultasi Islam Berbasis Al-Quran & Hadist</span>
+                </div>
+                
+                <!-- Tengah: Copyright -->
+                <div class="text-islamic-600 text-sm text-center md:flex-1 md:px-4 w-full md:w-auto">
+                    &copy; 2026 Ustadz AI MasjidunaCenter.com - Konsultasi Islam 24/7
+                </div>
+                
+                <!-- Kanan: Contact Info -->
+                <div class="flex flex-col items-center md:items-end gap-3 w-full md:w-auto">
+                    <div class="flex items-center text-right bg-gray-50 px-3 py-2 rounded-lg border border-gray-200">
+                        <div class="mr-3">
+                            <span class="text-[9px] text-gray-500 block uppercase tracking-wider">Powered by</span>
+                            <span class="text-xs font-bold text-islamic-800 block">AI Technology</span>
+                        </div>
+                        <div class="bg-white rounded-full p-0.5 flex items-center justify-center shadow-sm border border-gray-100">
+                            <i class="fa-solid fa-robot text-islamic-600"></i>
+                        </div>
+                    </div>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-islamic-500 hover:text-accent-600 transition-colors"><i class="fa-brands fa-whatsapp text-xl"></i></a>
+                        <a href="#" class="text-islamic-500 hover:text-accent-600 transition-colors"><i class="fa-brands fa-instagram text-xl"></i></a>
+                        <a href="#" class="text-islamic-500 hover:text-accent-600 transition-colors"><i class="fa-brands fa-facebook text-xl"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-5 right-5 bg-white text-islamic-900 px-6 py-3 rounded-lg shadow-[0_10px_30px_rgba(0,0,0,0.1)] transform translate-y-20 opacity-0 transition-all duration-300 z-[60] flex items-center border-l-4 border-accent-500">
+        <i class="fa-solid fa-info-circle mr-3 text-accent-500 text-xl" id="toast-icon"></i>
+        <span id="toast-msg" class="font-medium">Notifikasi</span>
+    </div>
+
+    <!-- MOCK DATA & JAVASCRIPT LOGIC -->
+    <script>
+        // --- 1. MOCK DATA ---
+        const masjids = [
+            { id: 1, name: "Masjid Agung Al-Mujahidin", location: "Selong, Lombok Timur", img: "https://images.unsplash.com/photo-1564121211835-e88c852648ab?auto=format&fit=crop&w=1200&q=80", desc: "Masjid utama di jantung kota Selong. Selain sebagai pusat ibadah, masjid ini menjadi pelopor ekonomi syariah dan pemberdayaan UMKM jamaah sekitarnya.", pengurus: "Ust. H. Ahmad", jamaah: 5000 },
+            { id: 2, name: "Masjid Jami' Pancor", location: "Pancor, Lombok Timur", img: "https://images.unsplash.com/photo-1584551246679-0daf3d275d0f?auto=format&fit=crop&w=1200&q=80", desc: "Masjid bersejarah yang dekat dengan pusat niaga Pancor. Jamaah memiliki keahlian di berbagai bidang perdagangan dan jasa konveksi.", pengurus: "TGH. Sulaiman", jamaah: 3500 },
+            { id: 3, name: "Masjid Nurul Huda Masbagik", location: "Masbagik, Lombok Timur", img: "https://images.unsplash.com/photo-1542816417-0983c9c9ad53?auto=format&fit=crop&w=1200&q=80", desc: "Terletak di kawasan padat penduduk Masbagik. Masjid ini aktif memasarkan kerajinan gerabah dan hasil bumi dari masyarakat sekitar.", pengurus: "Ust. M. Zaini", jamaah: 4200 },
+            { id: 4, name: "Masjid Al-Istiqomah Aikmel", location: "Aikmel, Lombok Timur", img: "https://images.unsplash.com/photo-1519817914152-2a241f320f78?auto=format&fit=crop&w=1200&q=80", desc: "Pusat pemberdayaan masyarakat Aikmel dengan fokus pada hasil pertanian organik dan jasa kesehatan tradisional.", pengurus: "H. Ibrahim", jamaah: 2800 }
+        ];
+
+        const products = [
+            { id: 1, masjidId: 1, name: "Kopi Sembalun Asli", type: "Barang", price: "Rp 65.000 / 250g", img: "https://images.unsplash.com/photo-1559525839-b184a4d698c7?auto=format&fit=crop&w=600&q=80", seller: "Pak Budi", isPopular: true },
+            { id: 2, masjidId: 1, name: "Jasa Pijat Refleksi Islami", type: "Jasa", price: "Rp 75.000 / Jam", img: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=600&q=80", seller: "Klinik Sehat Ummat", isPopular: false },
+            { id: 3, masjidId: 2, name: "Sarung Tenun Pringgasela", type: "Barang", price: "Rp 350.000", img: "https://images.unsplash.com/photo-1605814524147-380d32bb582f?auto=format&fit=crop&w=600&q=80", seller: "Koperasi Pancor", isPopular: true },
+            { id: 4, masjidId: 2, name: "Jasa Servis AC Panggilan", type: "Jasa", price: "Mulai Rp 75.000", img: "https://images.unsplash.com/photo-1621905252507-b35492cc74b4?auto=format&fit=crop&w=600&q=80", seller: "Teknik Berkah", isPopular: false },
+            { id: 5, masjidId: 3, name: "Kerajinan Gerabah Penakak", type: "Barang", price: "Rp 150.000", img: "https://images.unsplash.com/photo-1610701596007-11502861dcfa?auto=format&fit=crop&w=600&q=80", seller: "Kelompok Maju Bersama", isPopular: true },
+            { id: 6, masjidId: 3, name: "Madu Hutan Sumbawa", type: "Barang", price: "Rp 120.000 / Botol", img: "https://images.unsplash.com/photo-1587049352847-4d4b1ed7355a?auto=format&fit=crop&w=600&q=80", seller: "Toko Al-Huda", isPopular: true },
+            { id: 7, masjidId: 4, name: "Beras Organik Aikmel", type: "Barang", price: "Rp 75.000 / 5kg", img: "https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&w=600&q=80", seller: "Kelompok Tani Berkah", isPopular: false },
+            { id: 8, masjidId: 4, name: "Jasa Bekam Medis", type: "Jasa", price: "Rp 100.000 / Sesi", img: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=600&q=80", seller: "Griya Sehat", isPopular: false },
+        ];
+
+        // --- 2. GLOBAL STATE ---
+        let currentSlide = 0;
+        let slideInterval;
+        let currentSellerView = 'grid';
+        let chatHistory = [];
+        const apiKey = "AIzaSyBgi4hhizQqM_7OM9_z9ibKhSI6CeIfvPA";
+        const API_URL = 'api.php';
+
+        // --- 3. INIT ---
+        document.addEventListener('DOMContentLoaded', () => {
+            initSlider();
+            renderPopularProducts();
+            renderSellers();
+            initChatInterface();
+            
+            // Close mobile menu on click outside
+            window.addEventListener('click', (e) => {
+                const menu = document.getElementById('mobile-menu');
+                const btn = document.getElementById('mobile-icon');
+                if (!e.target.closest('nav') && !menu.classList.contains('hidden')) {
+                    toggleMobileMenu();
+                }
+            });
+        });
+
+        // --- 4. NAVIGATION & UI LOGIC ---
+        function navigate(pageId, dataId = null) {
+            document.querySelectorAll('.page-view').forEach(page => {
+                page.classList.add('hidden');
+                page.classList.remove('block');
+            });
+
+            const target = document.getElementById(`page-${pageId}`);
+            if(target) {
+                target.classList.remove('hidden');
+                target.classList.add('block');
+                window.scrollTo(0, 0);
+            }
+
+            if (pageId === 'detail' && dataId !== null) {
+                renderMasjidDetail(dataId);
+            }
+
+            const menu = document.getElementById('mobile-menu');
+            if (!menu.classList.contains('hidden')) {
+                toggleMobileMenu();
+            }
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const icon = document.getElementById('mobile-icon');
+            menu.classList.toggle('hidden');
+            if (menu.classList.contains('hidden')) {
+                icon.classList.remove('fa-xmark');
+                icon.classList.add('fa-bars');
+            } else {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-xmark');
+            }
+        }
+
+        function showToast(message, type='info') {
+            const toast = document.getElementById('toast');
+            const icon = document.getElementById('toast-icon');
+            document.getElementById('toast-msg').innerText = message;
+            
+            if(type === 'success') {
+                toast.className = "fixed bottom-5 right-5 bg-white text-islamic-900 px-6 py-3 rounded-lg shadow-xl transform translate-y-0 opacity-100 transition-all duration-300 z-[60] flex items-center border-l-4 border-islamic-500";
+                icon.className = "fa-solid fa-check-circle mr-3 text-islamic-500 text-xl";
+            } else {
+                toast.className = "fixed bottom-5 right-5 bg-white text-islamic-900 px-6 py-3 rounded-lg shadow-xl transform translate-y-0 opacity-100 transition-all duration-300 z-[60] flex items-center border-l-4 border-accent-500";
+                icon.className = "fa-solid fa-info-circle mr-3 text-accent-500 text-xl";
+            }
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+        // --- 5. RENDER FUNCTIONS ---
+
+        function initSlider() {
+            const container = document.getElementById('slider-container');
+            let html = '';
+            masjids.forEach((m, index) => {
+                html += `
+                    <div class="slide ${index === 0 ? 'active' : ''} bg-cover bg-center" style="background-image: url('${m.img}')">
+                        <div class="absolute inset-0 bg-islamic-950/40 mix-blend-multiply"></div>
+                        <div class="absolute bottom-0 left-0 w-full p-5 sm:p-8 md:p-16 z-30 animate-slide-up">
+                            <span class="bg-accent-500 text-white text-[10px] sm:text-xs font-bold px-2 py-1 sm:px-3 sm:py-1 rounded-full uppercase tracking-wide mb-2 sm:mb-3 inline-block shadow-md">Masjid Populer</span>
+                            <h1 class="text-2xl sm:text-3xl md:text-5xl font-serif font-bold text-white mb-1 sm:mb-2 text-shadow-md leading-tight">${m.name}</h1>
+                            <a href="https://maps.google.com/?q=${encodeURIComponent(m.name + ' ' + m.location)}" target="_blank" class="text-gray-100 hover:text-white hover:underline text-sm sm:text-lg md:text-xl flex items-center transition-all mb-2 w-max relative z-40 cursor-pointer" title="Buka di Google Maps">
+                                <i class="fa-solid fa-location-dot text-gold-400 mr-2"></i> ${m.location} 
+                                <i class="fa-solid fa-arrow-up-right-from-square ml-2 text-xs opacity-60"></i>
+                            </a>
+                            <button onclick="navigate('detail', ${m.id})" class="mt-4 sm:mt-6 text-xs sm:text-base bg-white/10 backdrop-blur border border-white/50 text-white hover:bg-white hover:text-islamic-900 px-4 py-2 sm:px-6 sm:py-2 rounded-full font-bold transition-all shadow-lg relative z-40">Lihat Produk Jamaah</button>
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+            startSlider();
+        }
+
+        function changeSlide(direction) {
+            const slides = document.querySelectorAll('.slide');
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (currentSlide + direction + slides.length) % slides.length;
+            slides[currentSlide].classList.add('active');
+            clearInterval(slideInterval);
+            startSlider();
+        }
+
+        function startSlider() { slideInterval = setInterval(() => changeSlide(1), 5000); }
+
+        function renderPopularProducts() {
+            const container = document.getElementById('popular-products-grid');
+            const popProducts = products.filter(p => p.isPopular);
+            let html = '';
+
+            popProducts.forEach(p => {
+                const masjid = masjids.find(m => m.id === p.masjidId);
+                html += `
+                    <div class="bg-white rounded-xl overflow-hidden group hover:-translate-y-2 transition-all duration-300 border border-gray-100 hover:border-accent-200 shadow-sm hover:shadow-xl">
+                        <div class="h-48 overflow-hidden relative">
+                            <span class="absolute top-3 right-3 bg-white/90 backdrop-blur text-gold-600 font-medium text-xs px-2 py-1 rounded shadow-sm z-10"><i class="fa-solid fa-star mr-1"></i>Populer</span>
+                            <img src="${p.img}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        </div>
+                        <div class="p-5">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="font-bold text-lg text-islamic-950 truncate pr-2">${p.name}</h3>
+                                <span class="text-xs bg-accent-50 text-accent-700 px-2 py-1 rounded border border-accent-100">${p.type}</span>
+                            </div>
+                            <p class="text-islamic-600 font-bold mb-3">${p.price}</p>
+                            <div class="flex items-center text-xs text-gray-500 mb-4 truncate">
+                                <i class="fa-solid fa-mosque mr-2 text-islamic-400"></i> ${masjid.name}
+                            </div>
+                            <button onclick="contactSeller('${p.name}', '${masjid.name}')" class="w-full bg-islamic-50 hover:bg-islamic-500 border border-islamic-100 hover:border-transparent text-islamic-700 hover:text-white py-2 rounded-lg transition-all flex justify-center items-center gap-2">
+                                <i class="fa-brands fa-whatsapp text-islamic-500 group-hover:text-white transition-colors"></i> Hubungi Penjual
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function setSellerView(viewType) {
+            currentSellerView = viewType;
+            const btnGrid = document.getElementById('btn-view-grid');
+            const btnList = document.getElementById('btn-view-list');
+            
+            if(viewType === 'grid') {
+                btnGrid.className = "px-4 py-2 rounded-md bg-accent-600 text-white transition-all shadow-md";
+                btnList.className = "px-4 py-2 rounded-md text-islamic-700 hover:bg-islamic-50 transition-all";
+            } else {
+                btnList.className = "px-4 py-2 rounded-md bg-accent-600 text-white transition-all shadow-md";
+                btnGrid.className = "px-4 py-2 rounded-md text-islamic-700 hover:bg-islamic-50 transition-all";
+            }
+            renderSellers();
+        }
+
+        function renderSellers() {
+            const container = document.getElementById('sellers-container');
+            container.className = currentSellerView === 'grid' ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 transition-all duration-500" : "flex flex-col gap-6 transition-all duration-500";
+
+            let html = '';
+            masjids.forEach(m => {
+                const totalProducts = products.filter(p => p.masjidId === m.id).length;
+                if(currentSellerView === 'grid') {
+                    html += `
+                        <div class="bg-white rounded-2xl overflow-hidden hover:shadow-[0_10px_30px_rgba(6,182,212,0.15)] transition-all duration-300 border border-gray-100 hover:border-accent-200 shadow-sm">
+                            <div class="h-48 overflow-hidden relative">
+                                <img src="${m.img}" alt="${m.name}" class="w-full h-full object-cover">
+                                <div class="absolute inset-0 bg-gradient-to-t from-islamic-950/60 to-transparent"></div>
+                                <h3 class="absolute bottom-4 left-4 font-serif text-xl font-bold text-white">${m.name}</h3>
+                            </div>
+                            <div class="p-6">
+                                <a href="https://maps.google.com/?q=${encodeURIComponent(m.name + ' ' + m.location)}" target="_blank" class="inline-flex items-center text-islamic-600 hover:text-accent-600 text-sm mb-4 transition-colors"><i class="fa-solid fa-location-dot text-accent-500 mr-2"></i>${m.location}</a>
+                                <div class="flex justify-between items-center bg-gray-50 p-3 rounded-lg mb-4 border border-gray-100">
+                                    <div class="text-center">
+                                        <span class="block text-islamic-800 font-bold text-lg">${totalProducts}</span>
+                                        <span class="text-xs text-gray-500">Produk/Jasa</span>
+                                    </div>
+                                    <div class="text-center">
+                                        <span class="block text-islamic-800 font-bold text-lg"><i class="fa-solid fa-users text-sm text-accent-500"></i></span>
+                                        <span class="text-xs text-gray-500">Aktif</span>
+                                    </div>
+                                </div>
+                                <button onclick="navigate('detail', ${m.id})" class="w-full bg-white hover:bg-gradient-to-r hover:from-islamic-500 hover:to-accent-500 border border-islamic-200 hover:border-transparent text-islamic-700 hover:text-white font-medium py-2 rounded-lg transition-all shadow-sm hover:shadow-md">
+                                    Kunjungi Masjid <i class="fa-solid fa-arrow-right ml-2"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    html += `
+                        <div class="bg-white rounded-2xl overflow-hidden flex flex-col sm:flex-row hover:shadow-[0_10px_30px_rgba(6,182,212,0.15)] transition-all duration-300 border border-gray-100 hover:border-accent-200 shadow-sm">
+                            <div class="w-full sm:w-1/3 h-48 sm:h-auto overflow-hidden">
+                                <img src="${m.img}" alt="${m.name}" class="w-full h-full object-cover">
+                            </div>
+                            <div class="w-full sm:w-2/3 p-6 flex flex-col justify-center relative">
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <h3 class="font-serif text-2xl font-bold text-islamic-950 mb-2">${m.name}</h3>
+                                        <a href="https://maps.google.com/?q=${encodeURIComponent(m.name + ' ' + m.location)}" target="_blank" class="inline-flex items-center text-islamic-600 hover:text-accent-600 text-sm mb-3 transition-colors"><i class="fa-solid fa-location-dot text-accent-500 mr-2"></i>${m.location}</a>
+                                    </div>
+                                    <span class="bg-accent-50 border border-accent-100 text-accent-700 text-sm px-3 py-1 rounded-full whitespace-nowrap font-medium">
+                                        ${totalProducts} Item
+                                    </span>
+                                </div>
+                                <p class="text-gray-600 text-sm mb-5 line-clamp-2">${m.desc}</p>
+                                <div>
+                                    <button onclick="navigate('detail', ${m.id})" class="bg-gradient-to-r from-islamic-500 to-accent-500 hover:from-accent-600 hover:to-islamic-600 text-white px-6 py-2 rounded-lg transition-all inline-flex items-center shadow-md">
+                                        Kunjungi Masjid <i class="fa-solid fa-arrow-right ml-2"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+            container.innerHTML = html;
+        }
+
+        function renderMasjidDetail(masjidId) {
+            const container = document.getElementById('page-detail');
+            const masjid = masjids.find(m => m.id === masjidId);
+            const masjidProducts = products.filter(p => p.masjidId === masjidId);
+
+            let productsHtml = '';
+            if(masjidProducts.length > 0) {
+                masjidProducts.forEach(p => {
+                    productsHtml += `
+                        <div class="bg-white rounded-xl overflow-hidden border border-gray-100 hover:border-accent-300 transition-all duration-300 shadow-sm hover:shadow-lg">
+                            <div class="h-40 overflow-hidden relative">
+                                <img src="${p.img}" alt="${p.name}" class="w-full h-full object-cover">
+                                <span class="absolute bottom-2 left-2 bg-white/90 backdrop-blur text-islamic-900 font-medium text-xs px-2 py-1 rounded border border-gray-200 shadow-sm"><i class="fa-solid fa-user-tag mr-1 text-accent-600"></i>${p.seller}</span>
+                            </div>
+                            <div class="p-4">
+                                <div class="flex justify-between items-start mb-1">
+                                    <h4 class="font-bold text-islamic-950">${p.name}</h4>
+                                </div>
+                                <span class="text-[10px] uppercase bg-islamic-50 text-islamic-600 px-2 py-0.5 rounded border border-islamic-100 font-medium">${p.type}</span>
+                                <p class="text-islamic-600 font-bold mt-2 mb-4">${p.price}</p>
+                                <button onclick="contactSeller('${p.name}', '${masjid.name}')" class="w-full bg-islamic-50 hover:bg-gradient-to-r hover:from-islamic-500 hover:to-accent-500 text-islamic-700 hover:text-white py-2 rounded transition-all text-sm flex items-center justify-center gap-2 border border-islamic-200 hover:border-transparent font-medium">
+                                    <i class="fa-brands fa-whatsapp text-islamic-500 hover:text-white"></i> Pesan Sekarang
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                });
+            } else {
+                productsHtml = `<div class="col-span-full text-center py-10 text-gray-500 bg-white rounded-xl border border-gray-100 shadow-sm"><i class="fa-solid fa-box-open text-4xl mb-3 text-gray-300"></i><p>Belum ada produk/jasa yang ditambahkan.</p></div>`;
+            }
+
+            container.innerHTML = `
+                <!-- Hero Detail -->
+                <div class="relative h-[40vh] w-full">
+                    <img src="${masjid.img}" class="w-full h-full object-cover" alt="${masjid.name}">
+                    <div class="absolute inset-0 bg-gradient-to-t from-islamic-950 via-islamic-950/50 to-transparent"></div>
+                    <div class="absolute bottom-0 w-full">
+                        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-10 flex items-end">
+                            <div class="bg-white p-4 rounded-xl shadow-lg border border-gray-100 mr-6 hidden sm:block">
+                                <i class="fa-solid fa-mosque text-5xl text-islamic-500"></i>
+                            </div>
+                            <div>
+                                <button onclick="navigate('sellers')" class="text-white/80 hover:text-accent-300 mb-4 inline-block text-sm transition-colors"><i class="fa-solid fa-arrow-left mr-2"></i>Kembali ke Daftar</button>
+                                <h1 class="text-3xl md:text-5xl font-serif font-bold text-white mb-2 text-shadow-md">${masjid.name}</h1>
+                                <a href="https://maps.google.com/?q=${encodeURIComponent(masjid.name + ' ' + masjid.location)}" target="_blank" class="text-gray-100 hover:text-white flex items-center text-lg transition-colors w-max"><i class="fa-solid fa-location-dot mr-2 text-accent-400"></i>${masjid.location}</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+                    
+                    <div class="w-full">
+                        <!-- Etalase Produk (Dipindah ke atas) -->
+                        <div class="flex justify-between items-center mb-6 animate-slide-up">
+                            <h2 class="text-2xl font-serif font-bold text-islamic-950">Etalase <span class="text-accent-600">Jamaah</span></h2>
+                            <span class="bg-islamic-50 border border-islamic-100 text-islamic-700 px-3 py-1 rounded text-sm font-medium">${masjidProducts.length} Item Tersedia</span>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-12 animate-slide-up" style="animation-delay: 0.1s;">
+                            ${productsHtml}
+                        </div>
+
+                        <!-- Action Menu: Daftarkan Produk -->
+                        <div class="bg-white rounded-2xl p-5 mb-8 border border-islamic-100 shadow-sm flex flex-col md:flex-row justify-between items-center gap-4 animate-slide-up" style="animation-delay: 0.2s;">
+                            <div class="text-center md:text-left">
+                                <h2 class="text-xl font-bold text-islamic-950 mb-1"><i class="fa-solid fa-store mr-2 text-accent-500"></i>Ingin berjualan di sini?</h2>
+                                <p class="text-sm text-gray-500">Daftarkan usaha Anda untuk tampil di etalase jamaah masjid ini.</p>
+                            </div>
+                            <button onclick="showToast('Fitur pendaftaran segera hadir!', 'info')" class="w-full md:w-auto bg-gradient-to-r from-accent-600 to-islamic-500 hover:from-islamic-500 hover:to-accent-500 text-white font-bold py-3 px-6 rounded-xl transition-all shadow-md flex items-center justify-center whitespace-nowrap">
+                                <i class="fa-solid fa-plus mr-2"></i> Daftarkan Produk/Jasa
+                            </button>
+                        </div>
+
+                        <!-- AI Khusus Area Masjid -->
+                        <div class="bg-white rounded-xl p-6 mb-8 border border-accent-100 relative overflow-hidden shadow-[0_5px_20px_rgba(6,182,212,0.08)] animate-slide-up" style="animation-delay: 0.3s;">
+                            <div class="absolute -right-5 -top-5 opacity-5 text-8xl text-accent-500 pointer-events-none animate-pulse-slow"><i class="fa-solid fa-lightbulb"></i></div>
+                            <h3 class="text-lg font-serif font-bold text-islamic-950 mb-2 flex items-center">
+                                <i class="fa-solid fa-wand-magic-sparkles text-gold-500 mr-2"></i> Konsultan Bisnis AI ${masjid.name}
+                            </h3>
+                            <p class="text-gray-600 text-sm mb-4">Belum punya produk? Tanya AI untuk rekomendasi usaha yang berpotensi laku dan belum banyak dijual oleh jamaah di wilayah ini.</p>
+                            <div class="flex gap-2 relative z-10">
+                                <input type="text" id="masjid-ai-search-input" class="flex-grow bg-gray-50 border border-gray-200 rounded-lg px-4 py-2.5 text-islamic-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-accent-500 text-sm transition-all" placeholder="Contoh: Saya pandai membuat kue, apakah cocok dijual di sini?">
+                                <button onclick="handleMasjidSpecificAISearch(${masjid.id})" id="btn-masjid-ai-search" class="bg-gradient-to-r from-islamic-500 to-accent-500 hover:from-accent-600 hover:to-islamic-600 text-white font-bold py-2.5 px-5 rounded-lg transition-all text-sm whitespace-nowrap shadow-md flex items-center">
+                                    <i class="fa-solid fa-lightbulb sm:mr-2"></i> <span class="hidden sm:inline">Tanya Ide</span>
+                                </button>
+                            </div>
+                            <div id="masjid-ai-response-container" class="mt-4 hidden transition-all duration-300 relative z-10">
+                                <div class="bg-accent-50 rounded-lg p-4 border border-accent-100 text-sm text-islamic-800 shadow-sm" id="masjid-ai-response-content">
+                                    <!-- Response AI Spesifik -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Profil Masjid (Dipindah ke bawah) -->
+                    <div class="w-full mt-16 animate-slide-up" style="animation-delay: 0.4s;">
+                        <div class="bg-white rounded-2xl p-8 border border-gray-100 shadow-sm relative overflow-hidden">
+                            <div class="absolute -right-10 -bottom-10 opacity-[0.03] text-9xl text-islamic-900 pointer-events-none"><i class="fa-solid fa-mosque"></i></div>
+                            <h3 class="text-2xl font-serif font-bold text-islamic-950 border-b border-gray-100 pb-4 mb-6"><i class="fa-solid fa-circle-info text-accent-500 mr-2"></i> Profil Masjid</h3>
+                            <p class="text-gray-600 mb-8 text-base leading-relaxed max-w-4xl">${masjid.desc}</p>
+                            
+                            <ul class="flex flex-col sm:flex-row gap-8 text-sm text-islamic-800">
+                                <li class="flex items-center">
+                                    <div class="w-12 h-12 rounded-full bg-islamic-50 flex items-center justify-center mr-4 text-islamic-600 border border-islamic-100 shadow-sm text-lg"><i class="fa-solid fa-user-tie"></i></div>
+                                    <div>
+                                        <span class="block text-xs text-gray-500 uppercase tracking-wider font-bold mb-1">Ketua Pengurus</span>
+                                        <span class="font-bold text-lg">${masjid.pengurus}</span>
+                                    </div>
+                                </li>
+                                <li class="flex items-center">
+                                    <div class="w-12 h-12 rounded-full bg-islamic-50 flex items-center justify-center mr-4 text-islamic-600 border border-islamic-100 shadow-sm text-lg"><i class="fa-solid fa-users"></i></div>
+                                    <div>
+                                        <span class="block text-xs text-gray-500 uppercase tracking-wider font-bold mb-1">Estimasi Jamaah</span>
+                                        <span class="font-bold text-lg">${masjid.jamaah} <span class="font-normal text-sm">Jiwa</span></span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // --- 6. ACTION HANDLERS ---
+        function contactSeller(productName, masjidName) {
+            // Nomor WA tujuan (0 diubah menjadi 62 untuk standar internasional WhatsApp)
+            const phoneNumber = "6285773337300";
+            
+            // Format pesan dengan salam, data masjid, dan produk
+            const message = `Assalamu'alaikum warahmatullahi wabarakatuh.\n\nSaya tertarik dan ingin memesan produk/jasa dari jamaah masjid berikut:\n\n🕌 *Masjid:* ${masjidName}\n📦 *Produk/Jasa:* ${productName}\n\nApakah masih tersedia dan bagaimana proses pemesanannya?`;
+            
+            // Encode teks agar aman digunakan pada URL
+            const encodedMessage = encodeURIComponent(message);
+            
+            // URL WhatsApp API
+            const waUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+            
+            // Buka tab/aplikasi WhatsApp baru
+            window.open(waUrl, '_blank');
+        }
+
+        function handleLogin(event) {
+            event.preventDefault();
+            const btn = event.target.querySelector('button[type="submit"]');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Memproses...';
+            btn.disabled = true;
+
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                event.target.reset();
+                showToast('Login berhasil! Mengalihkan ke dashboard...', 'success');
+            }, 1500);
+        }
+
+        // --- 7. CHAT FUNCTIONALITY ---
+        function initChatInterface() {
+            const chatInput = document.getElementById('chat-input');
+            const charCount = document.getElementById('char-count');
+            
+            if (chatInput) {
+                console.log('Initializing chat interface...');
+                
+                // Live character counter update
+                chatInput.addEventListener('input', (e) => {
+                    const length = e.target.value.length;
+                    console.log('Character count:', length);
+                    if (charCount) {
+                        charCount.textContent = length;
+                    }
+                    if (length > 1000) {
+                        chatInput.value = chatInput.value.substring(0, 1000);
+                        if (charCount) {
+                            charCount.textContent = 1000;
+                        }
+                    }
+                });
+                
+                // Also update on paste
+                chatInput.addEventListener('paste', () => {
+                    setTimeout(() => {
+                        const length = chatInput.value.length;
+                        console.log('Character count after paste:', length);
+                        if (charCount) {
+                            charCount.textContent = length;
+                        }
+                        if (length > 1000) {
+                            chatInput.value = chatInput.value.substring(0, 1000);
+                            if (charCount) {
+                                charCount.textContent = 1000;
+                            }
+                        }
+                    }, 10);
+                });
+                
+                // Initial count update
+                const initialLength = chatInput.value.length;
+                if (charCount) {
+                    charCount.textContent = initialLength;
+                }
+            }
+        }
+
+        function handleChatKeyPress(event) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                sendChatMessage();
+            }
+        }
+
+        function insertSampleQuestion(question) {
+            const chatInput = document.getElementById('chat-input');
+            const charCount = document.getElementById('char-count');
+            
+            console.log('Inserting sample question:', question);
+            
+            if (chatInput) {
+                chatInput.value = question;
+                chatInput.focus();
+                
+                // Update char count immediately
+                if (charCount) {
+                    charCount.textContent = question.length;
+                    console.log('Updated char count to:', question.length);
+                }
+                
+                // Trigger input event to ensure consistency
+                const event = new Event('input', { bubbles: true });
+                chatInput.dispatchEvent(event);
+            }
+        }
+
+        function addMessageToChat(message, isUser = false, sources = []) {
+            const messagesContainer = document.getElementById('messages-container');
+            const chatMessages = document.getElementById('chat-messages');
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'flex ' + (isUser ? 'justify-end' : 'justify-start') + ' mb-4';
+            
+            if (isUser) {
+                messageDiv.innerHTML = `
+                    <div class="max-w-xs sm:max-w-md md:max-w-lg">
+                        <div class="bg-gradient-to-r from-islamic-500 to-accent-500 text-white rounded-2xl rounded-tr-sm p-4 shadow-md">
+                            <p class="leading-relaxed text-sm">${message}</p>
+                        </div>
+                        <div class="text-xs text-gray-500 mt-1 text-right">${new Date().toLocaleTimeString('id-ID', {hour: '2-digit', minute:'2-digit'})}</div>
+                    </div>
+                `;
+            } else {
+                let sourcesHtml = '';
+                if (sources && sources.length > 0) {
+                    sourcesHtml = `
+                        <div class="mt-3 pt-3 border-t border-gray-100">
+                            <p class="text-xs text-gray-500 mb-2">Sumber rujukan:</p>
+                            <div class="flex flex-wrap gap-1">
+                                ${sources.map(source => `<span class="text-xs bg-islamic-50 text-islamic-700 px-2 py-1 rounded">${source}</span>`).join('')}
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                messageDiv.innerHTML = `
+                    <div class="max-w-xs sm:max-w-md md:max-w-lg">
+                        <div class="bg-gray-100 text-islamic-900 rounded-2xl rounded-tl-sm p-4 shadow-sm border border-gray-200">
+                            <div class="text-islamic-900 leading-relaxed text-sm">${message}</div>
+                            ${sourcesHtml}
+                        </div>
+                        <div class="text-xs text-gray-500 mt-1">${new Date().toLocaleTimeString('id-ID', {hour: '2-digit', minute:'2-digit'})}</div>
+                    </div>
+                `;
+            }
+            
+            messagesContainer.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            
+            // Add to history
+            chatHistory.push({
+                message: message,
+                isUser: isUser,
+                timestamp: new Date().toISOString(),
+                sources: sources
+            });
+        }
+
+        async function sendChatMessage() {
+            const chatInput = document.getElementById('chat-input');
+            const sendBtn = document.getElementById('btn-send-chat');
+            const message = chatInput.value.trim();
+            
+            if (!message) {
+                showToast('Silakan ketik pertanyaan Anda terlebih dahulu.', 'warning');
+                return;
+            }
+            
+            // Add user message
+            addMessageToChat(message, true);
+            
+            // Clear input and disable button
+            chatInput.value = '';
+            document.getElementById('char-count').textContent = '0';
+            sendBtn.disabled = true;
+            sendBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Memproses...';
+            
+            try {
+                // Call API
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        message: message,
+                        history: chatHistory.slice(-10) // Send last 10 messages for context
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    addMessageToChat(data.message, false, data.sources);
+                } else {
+                    throw new Error(data.message || 'Gagal mendapatkan respon dari AI');
+                }
+            } catch (error) {
+                console.error('Chat API Error:', error);
+                addMessageToChat(`
+                    <div class="text-red-600">
+                        <i class="fa-solid fa-exclamation-triangle mr-2"></i>
+                        <b>Maaf, terjadi kesalahan.</b><br>
+                        ${error.message}<br><br>
+                        Silakan coba lagi nanti atau periksa koneksi internet Anda.
+                    </div>
+                `, false);
+            } finally {
+                // Re-enable button
+                sendBtn.disabled = false;
+                sendBtn.innerHTML = '<i class="fa-solid fa-paper-plane mr-2"></i> Kirim';
+                chatInput.focus();
+            }
+        }
+
+        function clearChat() {
+            if (confirm('Apakah Anda yakin ingin menghapus semua percakapan?')) {
+                const messagesContainer = document.getElementById('messages-container');
+                messagesContainer.innerHTML = `
+                    <!-- Welcome Message -->
+                    <div class="flex justify-start mb-4">
+                        <div class="max-w-xs sm:max-w-md md:max-w-lg">
+                            <div class="bg-gray-100 text-islamic-900 rounded-2xl rounded-tl-sm p-4 shadow-sm border border-gray-200">
+                                <p class="text-islamic-900 leading-relaxed text-sm">
+                                    <b>Assalamu'alaikum warahmatullahi wabarakatuh.</b><br><br>
+                                    Saya adalah Ustadz AI dari MasjidunaCenter.com. Saya siap membantu menjawab pertanyaan keagamaan Anda berdasarkan Al-Quran, Hadist, dan keterangan ulama.<br><br>
+                                    Silakan ajukan pertanyaan seputar:
+                                </p>
+                                <ul class="mt-3 space-y-1 text-sm text-islamic-800">
+                                    <li>• Fikih ibadah (shalat, puasa, zakat, dll)</li>
+                                    <li>• Akidah dan tauhid</li>
+                                    <li>• Akhlak dan adab</li>
+                                    <li>• Tafsir Al-Quran</li>
+                                    <li>• Penjelasan hadist</li>
+                                    <li>• Dan lain-lain</li>
+                                </ul>
+                                <p class="text-sm text-gray-600 mt-3">Apa yang ingin Anda tanyakan?</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                chatHistory = [];
+                showToast('Percakapan telah dihapus.', 'success');
+            }
+        }
+        async function fetchWithRetry(url, options, maxRetries = 5) {
+            const delays = [1000, 2000, 4000, 8000, 16000];
+            for (let i = 0; i < maxRetries; i++) {
+                try {
+                    const response = await fetch(url, options);
+                    if (!response.ok) {
+                        let errorMsg = `HTTP error! status: ${response.status}`;
+                        try {
+                            const errData = await response.json();
+                            if (errData.error && errData.error.message) {
+                                errorMsg += ` - ${errData.error.message}`;
+                            }
+                        } catch(e) {}
+                        throw new Error(errorMsg);
+                    }
+                    return await response.json();
+                } catch (error) {
+                    if (i === maxRetries - 1) throw error;
+                    await new Promise(resolve => setTimeout(resolve, delays[i]));
+                }
+            }
+        }
+
+        async function handleAISearch() {
+            const inputEl = document.getElementById('ai-search-input');
+            const query = inputEl.value.trim();
+            if (!query) return showToast('Masukkan pencarian Anda terlebih dahulu.', 'warning');
+
+            const btn = document.getElementById('btn-ai-search');
+            const responseContainer = document.getElementById('ai-response-container');
+            const responseContent = document.getElementById('ai-response-content');
+
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Memproses...';
+            responseContainer.classList.remove('hidden');
+            responseContent.innerHTML = `
+                <div class="flex items-center text-islamic-700 space-x-3">
+                    <i class="fa-solid fa-circle-notch fa-spin text-accent-500 text-xl"></i>
+                    <span>Mencari data jamaah yang paling sesuai untuk Anda...</span>
+                </div>`;
+
+            const systemPrompt = `Anda adalah Asisten AI cerdas untuk MasjidBerdaya, platform pemberdayaan ekonomi masjid.
+            Berikut adalah data Masjid (Penjual): ${JSON.stringify(masjids)}
+            Berikut adalah data Produk/Jasa: ${JSON.stringify(products)}
+            Tugas: Jawab pertanyaan pengguna untuk mencari produk/jasa yang sesuai dari data JSON di atas.
+            Aturan:
+            1. Sapa pengguna dengan ramah dan bernuansa Islami.
+            2. Berikan rekomendasi yang SPESIFIK dengan menyebutkan: Nama Produk/Jasa, Harga, Nama Masjid, dan Lokasinya.
+            3. Jika produk/jasa yang diminta tidak ada, tawarkan alternatif terdekat dari data yang tersedia.
+            4. WAJIB memformat jawaban Anda dengan tag HTML dasar agar rapi di website (gunakan <b>, <ul>, <li>, <br>, <p>). Jangan gunakan markdown text seperti **.`;
+
+            try {
+                // Menggunakan model gemini-2.5-flash-lite dengan endpoint v1
+                const url = `https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash-lite:generateContent?key=${apiKey}`;
+                const payload = {
+                    contents: [{ parts: [{ text: systemPrompt + "\n\n---\n\nPertanyaan Pengguna: " + query }] }]
+                };
+
+                const result = await fetchWithRetry(url, {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
+                if (text) {
+                    responseContent.innerHTML = `<div class="animate-fade-in">${text}</div>`;
+                    inputEl.value = '';
+                } else {
+                    throw new Error("Respon API kosong.");
+                }
+            } catch (error) {
+                console.error("AI API Error:", error);
+                let errorDetail = error.message;
+                if (errorDetail === 'Failed to fetch') {
+                    errorDetail += ' (Kemungkinan terblokir CORS atau API Key Anda tidak diizinkan untuk domain ini)';
+                }
+                responseContent.innerHTML = `
+                    <div class="text-red-500 flex items-start text-sm">
+                        <i class="fa-solid fa-triangle-exclamation mt-1 mr-3 text-lg"></i>
+                        <div class="w-full">
+                            <b class="block mb-1">Afwan, terjadi kesalahan.</b>
+                            <p class="mb-2">Gagal merespon. Pastikan koneksi, pengaturan API Key, dan model AI valid.</p>
+                            <div class="bg-red-50 p-2 rounded text-xs font-mono border border-red-200 text-red-800 break-all">
+                                Log Detail: ${errorDetail}
+                            </div>
+                        </div>
+                    </div>`;
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-paper-plane mr-2"></i> Tanya AI';
+            }
+        }
+
+        async function handleMasjidSpecificAISearch(masjidId) {
+            const inputEl = document.getElementById('masjid-ai-search-input');
+            const query = inputEl.value.trim();
+            if (!query) return showToast('Masukkan pencarian Anda terlebih dahulu.', 'warning');
+
+            const btn = document.getElementById('btn-masjid-ai-search');
+            const responseContainer = document.getElementById('masjid-ai-response-container');
+            const responseContent = document.getElementById('masjid-ai-response-content');
+
+            const masjid = masjids.find(m => m.id === masjidId);
+            const localProducts = products.filter(p => p.masjidId === masjidId);
+
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+            responseContainer.classList.remove('hidden');
+            responseContent.innerHTML = `
+                <div class="flex items-center text-islamic-700 space-x-3">
+                    <i class="fa-solid fa-circle-notch fa-spin text-accent-500"></i>
+                    <span>Menganalisis potensi pasar di lingkungan ${masjid.name}...</span>
+                </div>`;
+
+            const systemPrompt = `Anda adalah Konsultan Bisnis AI (Asisten Kewirausahaan) khusus untuk wilayah ${masjid.name} yang berlokasi di ${masjid.location}. Profil lingkungan masjid ini: "${masjid.desc}".
+            Saat ini, produk dan jasa yang SUDAH ADA dan dijual oleh jamaah di sini adalah: ${JSON.stringify(localProducts)}.
+            Tugas Utama Anda: Membantu warga atau pengurus masjid yang INGIN MULAI BERJUALAN atau membuka usaha baru di area ini.
+            Aturan:
+            1. Sapa dengan santun, ramah, dan Islami.
+            2. Analisis pertanyaan pengguna dan berikan saran ide usaha/jualan yang COCOK dengan profil masjid dan MELENGKAPI (tidak mematikan) usaha yang sudah ada.
+            3. Jika ide yang ditanyakan pengguna ternyata sudah banyak yang jual, berikan saran diferensiasi (cara agar usahanya tampil berbeda).
+            4. Gunakan tag HTML dasar untuk memformat jawaban (<b>, <ul>, <li>, <br>, <p>). Dilarang keras menggunakan syntax markdown (seperti **).`;
+
+            try {
+                // Menggunakan model gemini-2.5-flash-lite dengan endpoint v1
+                const url = `https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash-lite:generateContent?key=${apiKey}`;
+                const payload = {
+                    contents: [{ parts: [{ text: systemPrompt + "\n\n---\n\nPertanyaan Pengguna: " + query }] }]
+                };
+
+                const result = await fetchWithRetry(url, {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
+                if (text) {
+                    responseContent.innerHTML = `<div class="animate-fade-in">${text}</div>`;
+                    inputEl.value = '';
+                } else {
+                    throw new Error("Respon API kosong.");
+                }
+            } catch (error) {
+                console.error("AI API Error:", error);
+                let errorDetail = error.message;
+                if (errorDetail === 'Failed to fetch') {
+                    errorDetail += ' (Kemungkinan terblokir CORS atau API Key Anda tidak diizinkan untuk domain ini)';
+                }
+                responseContent.innerHTML = `
+                    <div class="text-red-500 flex items-start text-sm">
+                        <i class="fa-solid fa-triangle-exclamation mt-1 mr-3 text-lg"></i>
+                        <div class="w-full">
+                            <b class="block mb-1">Afwan, terjadi kesalahan.</b>
+                            <p class="mb-2">Gagal merespon. Pastikan koneksi, pengaturan API Key, dan model AI valid.</p>
+                            <div class="bg-red-50 p-2 rounded text-xs font-mono border border-red-200 text-red-800 break-all">
+                                Log Detail: ${errorDetail}
+                            </div>
+                        </div>
+                    </div>`;
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-lightbulb sm:mr-2"></i> <span class="hidden sm:inline">Tanya Ide</span>';
+            }
+        }
+    </script>
+</body>
+</html>
