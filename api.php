@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 }
 
 // API Configuration
-$GEMINI_API_KEY = "AIzaSyBdDA8agQfz9vTam6FZo6IxqGvge3l4Jzc";
+$GEMINI_API_KEY = "";
 $GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash-lite:generateContent";
 
 // Islamic Knowledge Base
